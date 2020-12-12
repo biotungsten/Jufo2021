@@ -18,10 +18,19 @@ ax = plt.subplot(111)
 r1 = np.arange(len(data.keys()))
 r2 = [x + barWidth for x in r1]
 
+def stripNamesOfNumber(str):
+    new_str = ""
+    for n in str:
+        if n.isnumeric():
+            pass
+        else:
+            new_str += n
+    return new_str
+
 ax.bar(r1, mean2, width = barWidth, color = 'orange', edgecolor = 'black', yerr=[sd2, sd2], capsize=7, label='1 Tag', error_kw=dict(capsize=2, elinewidth=0.5))
 ax.bar(r2, mean7, width = barWidth, color = 'red', edgecolor = 'black', yerr=[sd7, sd7], capsize=7, label='7 Tage', error_kw=dict(capsize=2, elinewidth=0.5))
 ax.set_xticks([r + barWidth for r in range(len(data.keys()))])
-ax.set_xticklabels(data.keys(), rotation=45)
+ax.set_xticklabels([stripNamesOfNumber(n) for n in data.keys()], rotation=45)
 ax.set_ylabel("Keimungsrate [%]")
 ax.legend(frameon=False)
 ax.set_ylim([0,1])
