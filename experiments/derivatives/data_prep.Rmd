@@ -1,0 +1,37 @@
+---
+title: "process_data"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+First of all we want to load and clean our data.
+
+```{r}
+path <- "/Users/David_Sauer/Documents/Documentation/archive/VRJan:Feb/DERL.csv"
+df <- read.csv(path, header=FALSE, sep=";")
+colnames(df) <- c("experiment","solution","plant","rep_int","usable","appl","day2","day7","biomass","note","rep_ext")
+df =  df[c(2,6,7,8)]
+```
+
+Now we want to calculate the effects in each row and aggregate them by the corresponding solution.
+
+```{r}
+df$effect_day2 = apply(df, 1, function(x){return(as.numeric(x[3])/as.numeric(x[2]))})
+df$effect_day7 = apply(df, 1, function(x){return(as.numeric(x[4])/as.numeric(x[2]))})
+mean.effect_day2 <- setNames(aggregate(effect_day2~solution, df, mean), c("solution", "mean.effect_day2"))
+mean.effect_day7 <- setNames(aggregate(effect_day7~solution, df, mean)[2], "mean.effect_day7")
+sd.effect_day2 <- setNames(aggregate(effect_day2~solution, df, sd)[2], "sd.effect_day2")
+sd.effect_day7 <- setNames(aggregate(effect_day7~solution, df, sd)[2], "sd.effect_day7")
+df.aggregated <- cbind(mean.effect_day2, mean.effect_day7, sd.effect_day2, sd.effect_day7)
+```
+
+This data now will be exported and we will plot it in python.
+
+```{r}
+df.aggregated <- df.aggregated[c(1,8,5,10,3,2,4,6,7,9),]
+write.table(df.aggregated, file="aggregated_data.csv", sep=",", col.names = FALSE, row.names = FALSE)
+```
+
