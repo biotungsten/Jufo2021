@@ -1,0 +1,146 @@
+---
+title: "Cleanup and Preparation of Data"
+output: html_document
+author: "David Sauer"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data of combinations
+
+First of all we want to load the data.
+
+```{r}
+setwd("~/Dev/HerbicideDev/Synergism_Analysis") #replace with your local repository path
+combination.data <- read.csv("data/combinations.csv", sep = ";")
+```
+
+Now we want to simplify our data, so we compute the mean effect for every substance, as well as the corresponding variance and put them in a new data frame.
+
+```{r}
+combination.data <- combination.data[-c(6,8,4)] #remove unnecessary data
+rownames(combination.data) <- combination.data[, 1]
+combination.data <- combination.data[-1]
+
+combination.data$mean.effect <- apply(combination.data, 1, function(x){1-as.numeric(x[4])/as.numeric(x[3])}) #compute effect as 1-(seeds_germinated/seeds_planted)
+combination.data.aggregated <- aggregate(mean.effect~combination+concs, combination.data, mean)
+combination.data.aggregated$var.effect <- aggregate(mean.effect~combination+concs, combination.data, var)$mean.effect
+combination.data.aggregated$n.effect <- aggregate(mean.effect~combination+concs, combination.data, length)$mean.effect
+```
+
+Finally we will replace the abbreviation for the mixture by the concentrations of each substance.
+
+```{r}
+abb2concs <- function(row){
+  concentrations <- matrix(c(0,20,50,90,0,20,60,120,0,20,80,120,0,20,35,50,0,144,192,481), ncol=5) #rows: n,l,m,h,; columns: CA, RE, HQ, TA, MA
+  mask <- matrix(rep(1, 20), ncol=5)
+  switch(row[1], 
+         I={mask[,c(2,3,4)] = rep(0,4)},
+         II={mask[,c(1,3,4)] = rep(0,4)},
+         III={mask[,c(1,2,4)] = rep(0,4)},
+         IV={mask[,c(1,2,3)] = rep(0,4)},
+         V={mask[,c(3,4,5)] = rep(0,4)},
+         VI={mask[,c(2,4,5)] = rep(0,4)},
+         VII={mask[,c(1,4,5)] = rep(0,4)},
+         VIII={mask[,c(2,3,5)] = rep(0,4)},
+         CTRL={mask=matrix(rep(0,20), ncol=5)})
+  switch(row[2],
+         a={mask[c(1,3,4),] = rep(0,5)},
+         b={mask[c(1,4),] = rep(0,5);
+         switch(row[1],
+                I={mask[2,5]=0; mask[3,1]=0},
+                II={mask[2,5]=0; mask[3,2]=0},
+                III={mask[2,5]=0; mask[3,3]=0},
+                IV={mask[2,5]=0; mask[3,4]=0},
+                V={mask[2,1]=0; mask[3,2]=0},
+                VI={mask[2,1]=0; mask[3,3]=0},
+                VII={mask[2,2]=0; mask[3,3]=0},
+                VIII={mask[2,4]=0; mask[3,1]=0})},
+         c={mask[c(1,4),] = rep(0,5);
+         switch(row[1],
+                I={mask[3,5]=0; mask[2,1]=0},
+                II={mask[3,5]=0; mask[2,2]=0},
+                III={mask[3,5]=0; mask[2,3]=0},
+                IV={mask[3,5]=0; mask[2,4]=0},
+                V={mask[3,1]=0; mask[2,2]=0},
+                VI={mask[3,1]=0; mask[2,3]=0},
+                VII={mask[3,2]=0; mask[2,3]=0},
+                VIII={mask[3,4]=0; mask[2,1]=0})},
+         d={mask[c(1,2,4),] = rep(0,5)},
+         e={mask[c(1,2,3),] = rep(0,5)})
+  apply(mask*concentrations, 2, sum)
+}
+
+concentrations <- t(apply(combination.data.aggregated, 1, abb2concs))
+combination.data.aggregated[c("CA", "RE", "HQ", "TA", "MA")] <- NA
+combination.data.aggregated <- combination.data.aggregated[-c(1,2)]
+combination.data.aggregated[c("CA", "RE", "HQ", "TA", "MA")] <- concentrations
+```
+
+## Data of single substances
+
+Now we have to add the data from the experiments with only one substance in the solution. Therefore we will read them in first.
+
+```{r}
+single.data <- read.csv("data/single_doses.csv", sep = ";", header = FALSE)
+colnames(single.data) <- c("experiment", "solution", "plant", "internal_reproduction", "usable", "total_seeds", "germination_1", "germination_2", "biomass", "notes", "external_reproduction")
+```
+
+After that we will clean up the data again and calculate the mean effect and the variance thereof.
+
+```{r}
+single.data <- single.data[-which(!as.logical(single.data$usable)), ] #remove all data marked as not usable
+single.data <- single.data[-which(single.data$experiment == "DERL1" | single.data$experiment == "DERL2"),] #remove derivative experiments
+single.data.original <- single.data
+single.data <- single.data[,-c(1,3,4,5,7,9,10,11)] #remove not needed columns
+single.data$mean.effect <- apply(single.data, 1, function(x){1-as.numeric(x[3])/as.numeric(x[2])})
+single.data <- single.data[-which(single.data$mean.effect < 0 | single.data$mean.effect > 1),]
+single.data.aggregated <- aggregate(mean.effect~solution, single.data, mean)
+single.data.aggregated$var.effect <- aggregate(mean.effect~solution, single.data, var)$mean.effect
+single.data.aggregated$n.effect <- aggregate(mean.effect~solution, single.data, length)$mean.effect
+single.data.aggregated <- single.data.aggregated[-which(single.data.aggregated$solution == "CTRL"),] #remove this ctrl row, cause it was form multiple experiments, combinaiton data already contains untreated 
+```
+
+Now we will once again replace the solution abbreviation with the concentrations.
+
+```{r}
+abb2concs.single <- function(row){
+  concentrations <- c(0,0,0,0,0)
+  switch(substring(row[1],1,1),
+         M={concentrations[5]=as.integer(1000*as.numeric(substring(row[1],3,nchar(row[1])))/141.06)},
+         C={concentrations[1]=as.numeric(substring(row[1],2,nchar(row[1])))},
+         R={concentrations[2]=as.numeric(substring(row[1],2,nchar(row[1])))},
+         H={concentrations[3]=as.numeric(substring(row[1],2,nchar(row[1])))},
+         T={concentrations[4]=as.numeric(substring(row[1],3,nchar(row[1])))})
+  return(concentrations)
+}
+
+concentrations <- t(apply(single.data.aggregated, 1, abb2concs.single))
+single.data.aggregated[c("CA", "RE", "HQ", "TA", "MA")] <- NA
+single.data.aggregated <- single.data.aggregated[-1]
+single.data.aggregated[c("CA", "RE", "HQ", "TA", "MA")] <- concentrations
+```
+
+Finally we can merge all data together.
+
+```{r}
+data.aggregated <- rbind(combination.data.aggregated, single.data.aggregated)
+save(data.aggregated, file="data/data.aggregated.RData")
+write.csv(data.aggregated, file="data/data_aggregated.csv", row.names=FALSE)
+
+data.dose.model <- cbind(data.aggregated[4:8], apply(data.aggregated[1],1,function(x){1-x[1]}))#smake correct order for PredictionToolbox and define effect as 1 if all plants germinate
+colnames(data.dose.model)[6] <- "effect"
+write.csv(data.dose.model, file="data/data.dose.model.csv", row.names=FALSE)
+```
+
+Additionally we want to prepare two other datasets, one without tropic acid and one with only the dihydroxybenzenes.
+
+```{r}
+data.dose.model.without.ta <- data.dose.model[which(data.dose.model$TA==0),][,-4]
+data.dose.model.dhb <- data.dose.model.without.ta[which(data.dose.model.without.ta$MA==0),][,-4]
+write.csv(data.dose.model.without.ta, file="data/data.dose.model.without.ta.csv", row.names=FALSE)
+write.csv(data.dose.model.dhb, file="data/data.dose.model.dhb.csv", row.names=FALSE)
+```
+

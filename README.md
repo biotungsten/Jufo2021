@@ -10,6 +10,10 @@ In the folder experiments various subfolders contain:
 * the code used for creating figures and doing the statistical analysis
 * the data on which the analysis was based upon
 
+### MS/HPLC/UC/VIS Data
+
+The HPLC/MS data, except the one csv file contained under the experiment "analytics", were read of of printouts directly. The corresponding data files will be added soon.
+
 ## Software
 
 The scripts and notebooks ran succesfully using

@@ -1,0 +1,17 @@
+---
+title: "Plot chromatogram"
+output: html_document
+author: "David Sauer"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+df <- read.csv("data.csv", header=FALSE)
+jpeg(filename="chromatogram.png",  width = 2000, height = 300)
+plot(df$V1, df$V2, type="l", xlab="Zeit [min]", ylab="Intensität [mAU]")
+dev.off()
+```
+
