@@ -114,8 +114,11 @@ for idx, ax in enumerate(axs.flatten()):
     ax.plot(np.linspace(0,ec50_estimate*2, num=100), [hill(n, params[0], params[1]) for n in np.linspace(0,ec50_estimate*2, num=100)], "--r", linewidth=0.7, label="Model")
     ax.errorbar(concs, effects, yerr=errors, linestyle='None', marker="x", color="k", elinewidth=0.5, capsize=2, markersize=3, mew=0.5, label="Experiment")
     ax.set_title(SUBSTANCES[idx])
+    ax.set_yticklabels([0,20,40,60,80,100])
     ax.set_xlim([0, max_val])
     ax.set_ylim([0,1])
+    if idx!=3:
+        ax.plot([0, params[0], params[0]],[0.5, 0.5 ,0], "k--", linewidth=0.5)
     pcov = np.sqrt(np.diag(pcov))
     ctrls.append(control_germ_percentage)
     ax.text(max_val+text_offset, 0.05, "EC50 [mM]:{:03.2f}±{:03.2f}, n:{:03.2f}±{:03.2f}".format(params[0],pcov[0],params[1],pcov[1]), rotation=-90, fontsize=5)
