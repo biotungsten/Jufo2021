@@ -116,6 +116,7 @@ ax.set_xlim([2, 31])
 ax.set_xlabel("Zeit seit Anwendung [h]")
 ax.set_ylabel("RWC [%]")
 ax.set_ylim([0.4,1.0])
+ax.set_yticklabels([40,50,60,70,80,90,100])
 for substance, val in rwc_datapoints.items():
     _rwc = [np.mean(rwcs) for _, rwcs in val.items()]
     _err = [np.std(rwcs, ddof=0) for _, rwcs in val.items()]
@@ -125,7 +126,7 @@ for substance, val in rwc_datapoints.items():
     col_idx+=1
     lgd=ax.legend(frameon=False)
     ax.annotate("*", (29.7,0.53), c="g") #p=0.0133
-fig.savefig("figure_german.png", dpi=500, bbox_extra_artists=(lgd))
+fig.savefig("figure.png", dpi=500, bbox_extra_artists=(lgd))
 
 
 # # Statistics
