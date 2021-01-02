@@ -36,13 +36,14 @@ ax.text(-1.8,0,"a)", fontweight="bold")
 ax=axs[1]
 ax.set_aspect('equal')
 
-ax.plot(df["experiment"], df["model"], "b+", ms=2.5, mew=0.5)
-ax.plot(df["experiment"], df["bliss"], "ro", ms=2.5, fillstyle='none', mew=0.5)
+ax.plot(df["experiment"], df["model"], "b+", ms=2.5, mew=0.5, label="Dose-Modell")
+ax.plot(df["experiment"], df["bliss"], "ro", ms=2.5, fillstyle='none', mew=0.5, label="Bliss-Modell")
 ax.plot([0,1], [0,1], "k", linewidth=0.5)
 ax.set_xlim(xmin=0, xmax=1)
 ax.set_ylim(ymin=0, ymax=1)
 ax.set_xlabel("Experiment")
 ax.set_ylabel("Modell")
+ax.legend(loc='upper left', frameon=False, fontsize=5)
 ax.text(-0.5,0.9,"b)", fontweight="bold")
 fig.savefig("combined.png", dpi=400, bbox_inches="tight")
 
