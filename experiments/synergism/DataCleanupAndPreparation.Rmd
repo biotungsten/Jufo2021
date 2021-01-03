@@ -14,7 +14,7 @@ First of all we want to load the data.
 
 ```{r}
 setwd("~/Dev/HerbicideDev/Synergism_Analysis") #replace with your local repository path
-combination.data <- read.csv("data/combinations.csv", sep = ";")
+combination.data <- read.csv("data/combinations.csv", sep = ",")
 ```
 
 Now we want to simplify our data, so we compute the mean effect for every substance, as well as the corresponding variance and put them in a new data frame.
@@ -84,7 +84,7 @@ combination.data.aggregated[c("CA", "RE", "HQ", "TA", "MA")] <- concentrations
 Now we have to add the data from the experiments with only one substance in the solution. Therefore we will read them in first.
 
 ```{r}
-single.data <- read.csv("data/single_doses.csv", sep = ";", header = FALSE)
+single.data <- read.csv("data/single_doses.csv", sep = ",", header = FALSE)
 colnames(single.data) <- c("experiment", "solution", "plant", "internal_reproduction", "usable", "total_seeds", "germination_1", "germination_2", "biomass", "notes", "external_reproduction")
 ```
 
