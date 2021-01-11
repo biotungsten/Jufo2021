@@ -124,7 +124,7 @@ for substance, val in rwc_datapoints.items():
     t,rwc,err = sort_by_ascending_time(_t, _rwc, _err)
     ax.errorbar(t, rwc, label=substance, yerr=err,capsize=5, fmt=cols[col_idx])
     col_idx+=1
-    lgd=ax.legend(frameon=False)
+    lgd=ax.legend(frameon=False, ncol=4)
     ax.annotate("*", (29.7,0.53), c="g") #p=0.0133
 fig.savefig("figure.png", dpi=500, bbox_extra_artists=(lgd))
 
