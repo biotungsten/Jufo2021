@@ -49,15 +49,6 @@ for substance, dictionary in data_dict.items():
         ax=axs[n]
         n+=1
     if re.match(r"R|C|H",substance):
-        """for index, usable in enumerate(dictionary["usability"]):
-            if (index==10)&(dictionary["abs"][0]==0):
-                dictionary["conc"] = np.delete(dictionary["conc"], index)
-                dictionary["abs"] = np.delete(dictionary["abs"], index)
-                dictionary["usability"] = np.delete(dictionary["usability"], index)
-            if usable==False:
-                dictionary["conc"] = np.delete(dictionary["conc"], index)
-                dictionary["abs"] = np.delete(dictionary["abs"], index)
-                dictionary["usability"] = np.delete(dictionary["usability"], index)"""
         slope, intercept, r_value, p_value, std_err = stats.linregress(dictionary["conc"], dictionary["abs"])
         ax.plot(dictionary["conc"][:], dictionary["abs"][:], "+", color="black", mew=0.5)
         ax.plot([0,65], [intercept, 65*slope+intercept], color="blue", linewidth=0.5)
