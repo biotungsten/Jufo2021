@@ -2,12 +2,16 @@ import csv
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
-data = {}
+dataRaw = {}
 
 with open("aggregated_data.csv", "r") as file:
     reader = csv.reader(file, delimiter=',')
     for line in reader:
-        data[line[0]] = [float(n) for n in line[1:]]
+        dataRaw[line[0]] = [float(n) for n in line[1:]]
+
+keysForPlot = ["C100", "R100", "H100", "CTRL"]
+namesForPlot = ["Catechol", "Resorcinol", "Hydrochinon", "Kontrolle"]
+data = {key: dataRaw[key] for key in keysForPlot}
 
 mean2 = [value[0] for key,value in data.items()]
 sd2 = [value[2] for key,value in data.items()]
@@ -16,8 +20,8 @@ sd7 = [value[3] for key,value in data.items()]
 barWidth = 0.3
 fig = plt.figure()
 ax = plt.subplot(111)
-r1 = np.arange(len(data.keys()))
-r2 = [x + barWidth for x in r1]
+r1 = [0.9*n for n in np.arange(len(data.keys()))]
+r2 = [((1/0.9)*x + barWidth)*0.9 for x in r1]
 
 ctrl=data["CTRL"]
 for key, value in data.items():
@@ -37,15 +41,14 @@ def stripNamesOfNumber(str):
 
 ax.bar(r1, mean2, width = barWidth, color = 'orange', edgecolor = 'black', yerr=[sd2, sd2], capsize=7, label='1 Tag', error_kw=dict(capsize=2, elinewidth=0.5))
 ax.bar(r2, mean7, width = barWidth, color = 'red', edgecolor = 'black', yerr=[sd7, sd7], capsize=7, label='6 Tage', error_kw=dict(capsize=2, elinewidth=0.5))
-ax.set_xticks([r + barWidth for r in range(len(data.keys()))])
-ax.text(x=r1[0]-0.16,y=0.07,s="**",rotation=180, size=10)
-ax.text(x=r2[0]-0.16,y=0.23,s="**",rotation=180, size=10)
-ax.text(x=r1[1]-0.16,y=0.01,s="**",rotation=180, size=10)
-ax.text(x=r2[1]-0.16,y=0.25,s="**",rotation=180, size=10)
-ax.text(x=r1[2]-0.16,y=0.1,s="**",rotation=180, size=10)
-ax.text(x=r2[2]-0.16,y=0.41,s="**",rotation=180, size=10)
-ax.text(x=r2[3]-0.13,y=0.72,s="*",rotation=180, size=10)
-ax.set_xticklabels([stripNamesOfNumber(n) for n in data.keys()], rotation=45)
+ax.set_xticks([0.9*r + barWidth/2 -0.03 for r in range(len(data.keys()))])
+ax.text(x=r1[0]-0.05,y=0.07,s="**",rotation=180, size=8)
+ax.text(x=r2[0]-0.05,y=0.23,s="**",rotation=180, size=8)
+ax.text(x=r1[1]-0.05,y=0.03,s="**",rotation=180, size=8)
+ax.text(x=r2[1]-0.05,y=0.25,s="**",rotation=180, size=8)
+ax.text(x=r1[2]-0.05,y=0.1,s="**",rotation=180, size=8)
+ax.text(x=r2[2]-0.05,y=0.41,s="**",rotation=180, size=8)
+ax.set_xticklabels(namesForPlot)
 ax.set_ylabel("Keimungsrate [%]")
 ax.set_yticklabels([0,20,40,60,80,100])
 ax.legend(frameon=False)
