@@ -2,7 +2,7 @@
 
 In this repository all code and data, that were used in the making of my written elaboration of my project for the competition Jugend forscht 2021 can be found. Furthermore some additional data is also included
 
-**NOT** included is the "PredictionToolbox" I obtained thankfully from Mr. Katzir, which was used to carry out the analysis described by *Zimmer et al.* ([link](https://www.pnas.org/content/113/37/10442)). In case of questions regarding that code, the contact informations to the authors of the paper can be found in the linked paper.
+**NOT** included is the "PredictionToolbox", that I obtained thankfully from Mr. Katzir, and which was used to carry out the analysis described by *Zimmer et al.* ([link](https://www.pnas.org/content/113/37/10442)). In case of questions regarding that code, the contact informations to the authors of the paper can be found in the linked paper.
 
 ## Structure
 
