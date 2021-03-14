@@ -1,0 +1,28 @@
+---
+title: "DataPreparation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Preparation of data
+
+```{r}
+DA.data <- read.csv(file="data.csv", header = TRUE, sep = ";")
+DA.data <- DA.data[,2:6]
+DA.data$sr2 <- apply(DA.data, 1, function(x) {
+  return(as.integer(x[4])/as.integer(x[3]))
+})
+DA.data$sr7 <- apply(DA.data, 1, function(x) {
+  return(as.integer(x[5])/as.integer(x[3]))
+})
+DA.data.aggregated <- aggregate(sr2~substances, DA.data, mean)
+DA.data.aggregated$sr7 <- aggregate(sr7~substances, DA.data, mean)$sr7
+DA.data.aggregated$sr7.sd <- aggregate(sr7~substances, DA.data, sd)$sr7
+DA.data.aggregated$sr2.sd <- aggregate(sr2~substances, DA.data, sd)$sr2
+
+write.table(DA.data.aggregated, file="aggregated.csv", row.names=FALSE, sep=",")
+```
+
