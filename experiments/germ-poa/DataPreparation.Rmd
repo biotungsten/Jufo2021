@@ -1,0 +1,72 @@
+---
+title: "DataPreparation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Data preparation
+
+In the following code block the data will be read in, processsed, cleaned up and outputted.
+
+h - R: 120mM, H: 120mM, C: 90mM, TA: 50mM, MA: 480.5mM
+m - R: 60mM, H: 80mM, C: 50mM, TA: 35mM, MA: 192.2mM
+l- R: 20mM, H: 20mM, C: 20mM, TA: 20mM, MA: 144.1mM
+
+```{r}
+DA.data <- read.csv(file="data.csv", header = TRUE, sep = ";")
+DA.data <- DA.data[,2:7]
+DA.data$gr <- apply(DA.data, 1, function(x) {
+  return(as.integer(x[6])/as.integer(x[5]))
+})
+DA.data.aggregated <- aggregate(gr~substances+conc, DA.data, mean)
+DA.data.aggregated$gr.sd <- aggregate(gr~substances+conc, DA.data, sd)$gr
+hml2conc <- function(row) {
+  if(row[1]=="C"){
+    switch (row[2],
+      h = {return(90)},
+      m = {return(50)},
+      l = {return(20)}
+    )
+  }
+  if(row[1]=="H"){
+    switch (row[2],
+      h = {return(120)},
+      m = {return(80)},
+      l = {return(20)}
+    )
+  }
+  if(row[1]=="R"){
+    switch (row[2],
+      h = {return(120)},
+      m = {return(60)},
+      l = {return(20)}
+    )
+  }
+  if(row[1]=="TA"){
+    switch (row[2],
+      h = {return(50)},
+      m = {return(35)},
+      l = {return(20)}
+    )
+  }
+  if(row[1]=="MA"){
+    switch (row[2],
+      h = {return(480.5)},
+      m = {return(192.2)},
+      l = {return(144.1)}
+    )
+  }
+  if(row[1]=="CTRL"){
+    return(0)
+  }
+}
+DA.data.aggregated$conc.numeric <- apply(DA.data.aggregated, 1, hml2conc)
+DA.data <- DA.data[,-c(3,4)]
+DA.data$conc.numeric <- apply(DA.data, 1, hml2conc)
+write.table(DA.data.aggregated, file="aggregated.csv", row.names=FALSE, sep=",")
+write.table(DA.data, file="raw.csv", row.names=FALSE, sep=",")
+```
+

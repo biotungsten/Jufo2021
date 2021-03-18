@@ -24,5 +24,7 @@ DA.data.aggregated$sr7.sd <- aggregate(sr7~substances, DA.data, sd)$sr7
 DA.data.aggregated$sr2.sd <- aggregate(sr2~substances, DA.data, sd)$sr2
 
 write.table(DA.data.aggregated, file="aggregated.csv", row.names=FALSE, sep=",")
+DA.data <- DA.data[,-c(2)]
+write.table(DA.data, file="raw.csv", row.names=FALSE, sep=",")
 ```
 
