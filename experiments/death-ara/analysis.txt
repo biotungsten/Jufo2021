@@ -1,0 +1,13 @@
+Results for day2
+C 		 has p=0.0 and t=-17.095 	 significance:True
+H 		 has p=0.016 and t=-4.986 	 significance:False
+R 		 has p=0.032 and t=-3.787 	 significance:False
+TA 		 has p=0.095 and t=-2.413 	 significance:False
+
+Results for day7
+C 		 has p=0.0 and t=-27.917 	 significance:True
+H 		 has p=0.031 and t=-3.838 	 significance:False
+R 		 has p=0.027 and t=-4.058 	 significance:False
+TA 		 has p=0.022 and t=-4.368 	 significance:False
+
+Bonferroni corrected alpha is 0.013

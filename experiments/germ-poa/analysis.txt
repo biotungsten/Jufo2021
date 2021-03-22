@@ -1,0 +1,13 @@
+Ch 		 has p=0.002 and t=-7.03 	 significance:True
+Hh 		 has p=0.004 and t=-7.798 	 significance:True
+Rh 		 has p=0.384 and t=-0.954 	 significance:False
+TAh 	 has p=0.377 and t=-0.968 	 significance:False
+Cl 		 has p=0.107 and t=-2.012 	 significance:False
+Hl 		 has p=0.426 and t=-0.857 	 significance:False
+Rl 		 has p=0.941 and t=-0.078 	 significance:False
+TAl 	 has p=0.736 and t=-0.356 	 significance:False
+Cm 		 has p=0.013 and t=-5.212 	 significance:False
+Hm 		 has p=0.004 and t=-5.173 	 significance:False
+Rm 		 has p=0.675 and t=-0.443 	 significance:False
+TAm 	 has p=0.787 and t=0.283 	 significance:False
+Bonferroni corrected alpha is 0.004
