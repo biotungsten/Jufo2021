@@ -11,3 +11,7 @@ R 		 has p=0.027 and t=-4.058 	 significance:False
 TA 		 has p=0.022 and t=-4.368 	 significance:False
 
 Bonferroni corrected alpha is 0.013
+-----------
+Bonferroni-Holm significances (in same order as results)
+day2 True True False False
+day7 True False False False
