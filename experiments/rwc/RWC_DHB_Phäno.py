@@ -125,7 +125,7 @@ for substance, val in rwc_datapoints.items():
     ax.errorbar(t, rwc, label=substance, yerr=err,capsize=5, fmt=cols[col_idx])
     col_idx+=1
     lgd=ax.legend(frameon=False, ncol=4)
-    ax.annotate("*", (29.7,0.53), c="g") #p=0.0133
+    #ax.annotate("*", (29.7,0.53), c="g") #p=0.0133 cause bonferroni correction
 fig.savefig("figure.png", dpi=500, bbox_extra_artists=(lgd))
 
 
@@ -135,6 +135,7 @@ fig.savefig("figure.png", dpi=500, bbox_extra_artists=(lgd))
 
 
 for substance, val in rwc_datapoints.items():
+    print("Appropriate alpha after correction is -> {}".format(0.05/len(val.items())))
     print("\n\n"+ substance)
     for time, rwcs in val.items():
         ctrl = rwc_datapoints["CTRL"][time]
