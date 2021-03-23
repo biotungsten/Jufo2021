@@ -1,5 +1,6 @@
 import csv
 from scipy.stats import ttest_ind_from_stats
+import matplotlib.pyplot as plt
 def benjaminiHochberg(pvals, globalAlpha):
     from numpy import argsort, array
     """Returns list indicating which p-values are significant after benjamini hochberg correction.
@@ -33,10 +34,20 @@ for key,val in data.items():
         continue
     stat = ttest_ind_from_stats(val[0], val[1], 4, ctrl[0], ctrl[1], 4, equal_var=False)
     p.append(stat.pvalue)
-    data[key] = [stat.pvalue, stat.statistic]
-    print("{} \t\t has p={} and t={} \t significance:{}".format(key, round(data[key][0], 3), round(data[key][1], 3), data[key][0]<pbonf))
+    print("{} \t\t has p={} and t={} \t significance:{}".format(key, round(stat.pvalue, 3), round(stat.statistic, 3), stat.pvalue<pbonf))
 holm = benjaminiHochberg(p, 0.05)
 print("\nBonferroni corrected alpha is {}".format(round(pbonf, 3)))
 print("-----------")
 print("Bonferroni-Holm significances (in same order as results)")
 print(*holm)
+
+fig = plt.figure()
+ax = plt.subplot(111)
+ax.bar([n for n in range(len(data.values()))],[n[0] for n in data.values()], color="orange", yerr=[n[1] for n in data.values()], edgecolor = 'black', capsize=7, label='1 Tag', error_kw=dict(capsize=2, elinewidth=0.5))
+ax.set_xticks([r for r in range(len(data.values()))])
+ax.set_xticklabels(data.keys(), rotation=45)
+ax.set_ylabel("Keimungsrate [%]")
+ax.set_yticklabels([0,20,40,60,80,100])
+ax.set_title("Keimungsrate von P. annua nach 7 Tagen")
+ax.set_ylim([0,1])
+fig.savefig("tmp.png", dpi=600, bbox_inches='tight')
