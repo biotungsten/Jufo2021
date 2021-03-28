@@ -7,13 +7,10 @@ def benjaminiHochberg(pvals, globalAlpha):
         pvals ([float]): Array of all p-values
         globalAlpha (float): The global alpha ot be used.
     """
-
     mapOrdered = argsort(array(pvals))
-    print(mapOrdered)
     for idx, p in enumerate(mapOrdered):
-        print(p, idx, pvals[p], globalAlpha/(len(pvals)-idx))
         pvals[p] = pvals[p] < globalAlpha/(len(pvals)-idx)
-        if pvals[p] is False:
+        if pvals[p]==0:
             for j in range(idx, len(pvals)):
                 pvals[mapOrdered[j]] = False
             break
