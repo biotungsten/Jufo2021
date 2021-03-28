@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 import numpy as np
 import csv
 import matplotlib.pyplot as plt
@@ -11,18 +8,12 @@ import os
 import itertools
 import scipy.stats as stats
 
-
-# In[2]:
-
-
+#import data
 data_path = "/csv/"
 cwd = os.getcwd()
 files = [f for f in os.listdir(cwd+data_path) if os.path.isfile(f)==False and f not in []] #add "t1.csv" in empty ls t remove first measurement
 
-
-# In[3]:
-
-
+#function definitions
 def calculate_rwc(dw, hw, fw):
     return ((fw-dw)/(hw-dw))
 
@@ -86,9 +77,7 @@ def sort_by_ascending_time(time, *args): #returns tuple with sorted lists
     return tuple(ret)
 
 
-# In[4]:
-
-
+#process data
 rwc_datapoints = {"CA": {}, "RE": {}, "HQ": {}, "CTRL": {}}
 cols=["b", "g", "r", "k"]
 for file in files:
@@ -105,10 +94,7 @@ for file in files:
             except:
                 rwc_datapoints[n2k(name)][timepoint] = [rwc]
 
-
-# In[5]:
-
-
+#do the plotting
 fig, ax = plt.subplots(1,1)
 cols=["b", "g", "r", "k"]
 col_idx=0
@@ -129,11 +115,7 @@ for substance, val in rwc_datapoints.items():
 fig.savefig("figure.png", dpi=500, bbox_extra_artists=(lgd))
 
 
-# # Statistics
-
-# In[6]:
-
-
+#do statistics
 for substance, val in rwc_datapoints.items():
     print("Appropriate alpha after correction is -> {}".format(0.05/len(val.items())))
     print("\n\n"+ substance)
