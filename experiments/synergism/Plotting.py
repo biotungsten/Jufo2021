@@ -1,25 +1,16 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[7]:
-
-
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
-
-# In[15]:
-
-
+#read data
 df = pd.read_csv("prediction-dev.csv")
 aij = np.loadtxt(open("aij.csv", "r"), delimiter=",")
 drugs = ["CA", "RE", "HQ", "MA"]
 
-
-# In[149]:
-
-
+#plotting
 fig, axs = plt.subplots(nrows=1, ncols=2)
 
 plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=1.2, hspace=None)
@@ -46,4 +37,3 @@ ax.set_ylabel("Modell")
 ax.legend(loc='upper left', frameon=False, fontsize=5)
 ax.text(-0.5,0.9,"b)", fontweight="bold")
 fig.savefig("combined.png", dpi=400, bbox_inches="tight")
-
