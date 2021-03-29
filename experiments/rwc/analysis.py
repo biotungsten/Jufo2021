@@ -121,8 +121,9 @@ fig.savefig("rwc/figure.png", dpi=500, bbox_extra_artists=(lgd))
 
 #do statistics
 p={}
+pbonf=0.05/len(val.items())
 for substance, val in rwc_datapoints.items():
-    print("\n\n\n------------------\nAppropriate alpha after correction is -> {}".format(0.05/len(val.items())))
+    print("\n\n\n------------------\nAppropriate alpha after correction is -> {}".format(pbonf))
     print("\n\n"+ substance)
     for time, rwcs in val.items():
         try:
@@ -131,8 +132,8 @@ for substance, val in rwc_datapoints.items():
             p[time]=[]
         ctrl = rwc_datapoints["CTRL"][time]
         res2 = stats.ttest_ind_from_stats(np.mean(rwcs), np.std(rwcs), 3, np.mean(ctrl), np.std(ctrl), 3, equal_var=False)
-        p[time].append(res2.pvalue/2) #half cause one tailed
-        print(time+ f" {round(res2.pvalue/2, 4)}")
+        p[time].append(res2.pvalue) #half cause one tailed
+        print(time+ f" {round(res2.pvalue, 4)}, significant {res2.pvalue < pbonf}")
 print("\n--------------\nSignificance after Bonferroni holm correction (same order as above)")
 for key,val in p.items():
     holm = benjaminiHochberg(p[key], 0.05)
