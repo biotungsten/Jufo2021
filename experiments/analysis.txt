@@ -1,0 +1,65 @@
+
+
+
+------------------
+Appropriate alpha after correction is -> 0.01
+
+
+CA
+t3 0.0929
+t2 0.1259
+t1 0.1552
+t5 0.4979
+t4 0.4379
+
+
+
+------------------
+Appropriate alpha after correction is -> 0.01
+
+
+RE
+t3 0.0549
+t2 0.1123
+t1 0.2536
+t5 0.0133
+t4 0.292
+
+
+
+------------------
+Appropriate alpha after correction is -> 0.01
+
+
+HQ
+t3 0.203
+t2 0.0668
+t1 0.2776
+t5 0.2946
+t4 0.3839
+
+
+
+------------------
+Appropriate alpha after correction is -> 0.01
+
+
+CTRL
+t3 0.5
+t2 0.5
+t1 0.5
+t5 0.5
+t4 0.5
+
+--------------
+Significance after Bonferroni holm correction (same order as above)
+
+time t3:[False, False, False, False]
+
+time t2:[False, False, False, False]
+
+time t1:[False, False, False, False]
+
+time t5:[False, False, False, False]
+
+time t4:[False, False, False, False]

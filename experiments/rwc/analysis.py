@@ -7,9 +7,13 @@ import matplotlib.pyplot as plt
 import os
 import itertools
 import scipy.stats as stats
+from utils.bh import benjaminiHochberg
+
+#run this script from experiments dir with -m option
+#results are in analysis.txt
 
 #import data
-data_path = "/csv/"
+data_path = "/rwc/csv/"
 cwd = os.getcwd()
 files = [f for f in os.listdir(cwd+data_path) if os.path.isfile(f)==False and f not in []] #add "t1.csv" in empty ls t remove first measurement
 
@@ -112,15 +116,24 @@ for substance, val in rwc_datapoints.items():
     col_idx+=1
     lgd=ax.legend(frameon=False, ncol=4)
     #ax.annotate("*", (29.7,0.53), c="g") #p=0.0133 cause bonferroni correction
-fig.savefig("figure.png", dpi=500, bbox_extra_artists=(lgd))
+fig.savefig("rwc/figure.png", dpi=500, bbox_extra_artists=(lgd))
 
 
 #do statistics
+p={}
 for substance, val in rwc_datapoints.items():
-    print("Appropriate alpha after correction is -> {}".format(0.05/len(val.items())))
+    print("\n\n\n------------------\nAppropriate alpha after correction is -> {}".format(0.05/len(val.items())))
     print("\n\n"+ substance)
     for time, rwcs in val.items():
+        try:
+            p[time]
+        except:
+            p[time]=[]
         ctrl = rwc_datapoints["CTRL"][time]
         res2 = stats.ttest_ind_from_stats(np.mean(rwcs), np.std(rwcs), 3, np.mean(ctrl), np.std(ctrl), 3, equal_var=False)
+        p[time].append(res2.pvalue/2) #half cause one tailed
         print(time+ f" {round(res2.pvalue/2, 4)}")
-
+print("\n--------------\nSignificance after Bonferroni holm correction (same order as above)")
+for key,val in p.items():
+    holm = benjaminiHochberg(p[key], 0.05)
+    print(f"\ntime {key}:{holm}")

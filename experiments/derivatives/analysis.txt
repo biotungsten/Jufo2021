@@ -1,0 +1,15 @@
+Due to bonferroni correction appropriate alpha is 0.05/n -> 0.005
+C100 p2:0.0014, p7:0.0; t2:-6.0746, t7:-12.0268, singifcant: 2:True/7:True
+R100 p2:0.0024, p7:0.0; t2:-7.5816, t7:-10.9959, singifcant: 2:True/7:True
+H100 p2:0.0018, p7:0.0; t2:-4.5995, t7:-9.7437, singifcant: 2:True/7:True
+TA100 p2:0.1363, p7:0.0282; t2:-1.2708, t7:-2.8339, singifcant: 2:False/7:False
+CTRL p2:0.5, p7:0.5; t2:0.0, t7:0.0, singifcant: 2:False/7:False
+CA10 p2:0.0017, p7:0.4354; t2:4.6552, t7:0.1727, singifcant: 2:False/7:False
+FA10 p2:0.1979, p7:0.3863; t2:0.9697, t7:0.3026, singifcant: 2:False/7:False
+PA10 p2:0.3838, p7:0.321; t2:0.3166, t7:-0.4899, singifcant: 2:False/7:False
+PCA100 p2:0.3415, p7:0.4678; t2:0.4461, t7:0.0851, singifcant: 2:False/7:False
+SC1 p2:0.2661, p7:0.083; t2:0.6963, t7:1.577, singifcant: 2:False/7:False
+--------------
+Significance after Bonferroni holm correction (same order as above, not corrected for one tailed)
+Day 2: [True, True, True, False, False, True, False, False, False, False]
+Day 7: [True, True, True, False, False, False, False, False, False, False]
