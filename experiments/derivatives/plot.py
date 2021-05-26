@@ -18,7 +18,7 @@ with open("aggregated_data.csv", "r") as file:
         if (line[0] == "C100"):
             interm = "Catechol"
         if (line[0] == "CA10"):
-            interm = "Dihydrokaffeesäure"
+            interm = "Kaffeesäure"
         if (line[0] == "PA10"):
             interm = "Phloretinsäure"
         data[interm] = [float(n) for n in line[1:]]
@@ -57,6 +57,7 @@ def stripNamesOfNumber(str):
 #plotting
 fig = plt.figure()
 ax = plt.subplot(111)
+ax.tick_params(axis='x', labelsize=4)
 ax.bar(r1, mean2, width = barWidth, color = 'orange', edgecolor = 'black', yerr=[sd2, sd2], capsize=7, label='1 Tag', error_kw=dict(capsize=2, elinewidth=0.5))
 ax.bar(r2, mean7, width = barWidth, color = 'red', edgecolor = 'black', yerr=[sd7, sd7], capsize=7, label='6 Tage', error_kw=dict(capsize=2, elinewidth=0.5))
 ax.set_xticks([r +barWidth/2 for r in range(len(data_keys))])
